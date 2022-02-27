@@ -13,6 +13,7 @@ public class UnoCard {
 	public UnoCard(int r, int c) {
 		rankInt = r;
 		colorInt = c;
+		setTempColorInt(-1);
 	}
 	
 	public int getTempColorInt() {
@@ -61,6 +62,17 @@ public class UnoCard {
 	
 	public Color getColorAsColor() {
 		switch (colorInt) {
+		case 0: return Color.red;
+		case 1: return Color.yellow;
+		case 2: return Color.blue;
+		case 3: return Color.green;
+		case 4: return Color.gray;
+		default : return Color.pink;
+		}
+	}
+	
+	public Color getTempColorAsColor() {
+		switch (tempColorInt) {
 		case 0: return Color.red;
 		case 1: return Color.yellow;
 		case 2: return Color.blue;

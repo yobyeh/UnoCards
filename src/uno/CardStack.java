@@ -26,7 +26,9 @@ private ArrayList<UnoCard> cardsInStack = new ArrayList<UnoCard>();
 			cardsInStack.add(new UnoCard(13, 4));
 			cardsInStack.add(new UnoCard(14, 4));
 		}
-		
+	}
+	
+	public void shuffle() {
 		Collections.shuffle(cardsInStack);
 	}
 	
@@ -49,6 +51,27 @@ private ArrayList<UnoCard> cardsInStack = new ArrayList<UnoCard>();
 	public void printCardsInStack() {
 		for(UnoCard c: cardsInStack) {
 			c.printRankAndColor();
+		}
+	}
+	
+	public void clear() {
+		cardsInStack.clear();
+	}
+	
+	public int size() {
+		return cardsInStack.size();
+	}
+	
+	public boolean isEmpty() {
+		if(cardsInStack.isEmpty()) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void removeTempWilds() {
+		for(UnoCard c: cardsInStack) {
+			c.setTempColorInt(-1);
 		}
 	}
 

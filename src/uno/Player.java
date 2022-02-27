@@ -6,6 +6,10 @@ public class Player {
 	private String name;
 	private ArrayList<UnoCard> hand = new ArrayList<UnoCard>();
 	
+	public Player(String name) {
+		setName(name);
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -13,10 +17,19 @@ public class Player {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public int getHandSize() {
+		return hand.size();
+	}
+	
+	public void clearHand() {
+		hand.clear();
+	}
 
 	public void drawCards(int amount, CardStack deck) {
 		
 		for(int i = 0; i < amount; i++) {
+		
 		hand.add(deck.pullTopCard());
 		}
 	}
@@ -64,5 +77,62 @@ public class Player {
 	public int pickCard(CardStack discard) {
 		return getPlayableCards(discard.getTopCard()).get(0);
 	}
+	
+	public int pickWildColor() {
+		int colorAmount[] = {0,0,0,0};
+		for(UnoCard c: hand) {
+			switch (c.getColorInt()) {
+			case 0: colorAmount[0]++;
+			case 1: colorAmount[1]++;
+			case 2: colorAmount[2]++;
+			case 3: colorAmount[3]++;
+				default:
+			}
+		}
+		int maxColor = 0;
+		for(int i = 0; i < 3; i++) {
+			if (colorAmount[i] < colorAmount[i+1]) {
+				maxColor = colorAmount[i+1];
+			}		
+		}
+		return maxColor;
+	}
+	
+	public void playCard(CardStack discard) {
+		int p = pickCard(discard);
+		UnoCard c = hand.get(p);
+		
+		if(c.getColorInt() == 4) {
+			c.setTempColorInt(pickWildColor());
+		}
+		if(hand.size() == 2) {
+			System.out.println("UNO!");
+		}
+		discard.putCardOnTop(hand.remove(p));
+		
+	}
+	
+	public void takeTurn(CardStack deck, CardStack discard) {
+		if(checkCanPlay(discard)) {
+			playCard(discard);
+		}else {
+			drawCards(1, deck);
+			if(checkCanPlay(discard)) {
+				playCard(discard);
+			}else {
+				System.out.println(name+" PASS");
+			}
+			
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
