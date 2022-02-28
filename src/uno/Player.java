@@ -130,33 +130,36 @@ public class Player {
 		
 		if(c.getColorInt() == 4) {
 			c.setTempColorInt(pickWildColor());
-			System.out.println("Wild color is "+c.getTempColorAsString());
+			System.out.println("Wild color is "+c.getTempColorAsString()+" V");
 		}
 		if(hand.size() == 2) {
-			System.out.println("UNO!");
+			System.out.println("UNO! V");
 		}
 		System.out.println(name +" plays a "+c.getColorAsString()+" "+c.getRankAsString());
 		discard.putCardOnTop(hand.remove(p));
 		
 	}
-	
-	public void takeTurn(CardStack deck, CardStack discard) {
+
+	//returns false if pass
+	public boolean takeTurn(CardStack deck, CardStack discard) {
 		if(checkCanPlay(discard)) {
 			playCard(discard);
+			return true;
 		}else {
 			drawCards(1, deck, discard);
 			if(checkCanPlay(discard)) {
 				playCard(discard);
+				return true;
 			}else {
 				System.out.println(name+" PASS");
+				return false;
 			}
 			
 		}
-		
 	}
 	
 	
-	
+	//disacrd still shecked on pass
 	
 	
 	

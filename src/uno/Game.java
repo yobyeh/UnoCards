@@ -7,7 +7,7 @@ public class Game {
 	
 	//draw card when re-shuffle needed
 	
-	
+	public UI ui = new UI();
 	
 	private CardStack deck;
 	private CardStack discard;
@@ -18,24 +18,26 @@ public class Game {
 	private ArrayList<String> names;
 	
 	public void play() {
-		setup();
-		deal();
+		ui.createUI();
 		
-		for(int i = 0; i < 100; i++) {
-			System.out.println("-------------------------- Game: "+i);
-			while(!gameOver) {
-				Player p = players.get(turnTrack);			
-				p.takeTurn(deck, discard);
-				if(winCheck(p)) {
-					break;
-				}
-				checkDiscardRule();
-				advanceTurnTrack();
-				
-			}
-			cleanUp();
-			deal();
-		}
+//		setup();
+//		deal();
+//		
+//		for(int i = 0; i < 1; i++) {
+//			System.out.println("-------------------------- Game: "+(i + 1));
+//			while(!gameOver) {
+//				Player p = players.get(turnTrack);			
+//				if(p.takeTurn(deck, discard)) {
+//					if(winCheck(p)) {
+//					break;
+//				}
+//					checkDiscardRule();
+//				}
+//				advanceTurnTrack();
+//			}
+//			cleanUp();
+//			deal();
+//		}
 	}
 	
 	
@@ -51,6 +53,7 @@ public class Game {
 		names.add("Tammy");
 		names.add("Autumn");
 		names.add("Steve");
+		names.add("Angel");
 		Collections.shuffle(names);
 		
 		for(int i = 0; i < 4; i++) {
@@ -58,7 +61,7 @@ public class Game {
 			newPlayer.setUser(false);
 			players.add(newPlayer);
 		}
-		players.add(new Player(true));
+		//players.add(new Player(true));
 	}
 	
 	private void deal() {
@@ -92,9 +95,9 @@ public class Game {
 		}else if (r == 11) {
 			inReverse = !inReverse;
 		}else if(r == 12){
-			players.get(turnTrack +1).drawCards(2, deck, discard); 
+			players.get(nextPlayerLocation()).drawCards(2, deck, discard); 
 		}else if(r == 13) {
-			players.get(turnTrack +1).drawCards(4, deck, discard);
+			players.get(nextPlayerLocation()).drawCards(4, deck, discard);
 		}
 		
 	}
@@ -120,6 +123,21 @@ public class Game {
 			if(turnTrack == -1) {
 				turnTrack = 3;
 			}
+		}
+	}
+	
+	private int nextPlayerLocation() {
+		
+		if(!inReverse) {
+			if(turnTrack == 3) {
+				return 0;
+			}
+			return turnTrack + 1;
+		}else {
+			if(turnTrack == 0) {
+				return 3;
+			}
+			return turnTrack -1;
 		}
 	}
 
