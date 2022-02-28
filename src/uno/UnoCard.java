@@ -2,6 +2,8 @@ package uno;
 
 import java.awt.Color;
 
+import javax.swing.ImageIcon;
+
 public class UnoCard {
 
 	
@@ -9,11 +11,13 @@ public class UnoCard {
 	private int rankInt;
 	private int colorInt;
 	private int tempColorInt;
+	private ImageIcon img;
 	
 	public UnoCard(int r, int c) {
 		rankInt = r;
 		colorInt = c;
 		setTempColorInt(-1);
+		setIcon();
 	}
 	
 	public String getRankAsString() {
@@ -26,7 +30,7 @@ public class UnoCard {
 				case 11: return "Reverse";
 				case 12: return "Draw2";
 				case 13: return "Wild";
-				case 14: return "Wild+4";
+				case 14: return "Wild4";
 				default: return "Error";
 			}
 		}
@@ -97,7 +101,15 @@ public class UnoCard {
 		System.out.println(getRankAsString()+""+getColorAsString());
 	}
 	
+	private void setIcon() {
+		ImageIcon tempImg = new ImageIcon(getClass().getClassLoader().getResource("res/Blue0.png"));
+		//img = tempImg.getScaledInstance( NEW_WIDTH, NEW_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ; 
+		img = tempImg;
+	}
 	
+	public ImageIcon getIcon() {
+		return img;
+	}
 	
 	
 }

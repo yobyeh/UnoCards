@@ -9,35 +9,37 @@ public class Game {
 	
 	public UI ui = new UI();
 	
-	private CardStack deck;
-	private CardStack discard;
+	public CardStack deck;
+	public CardStack discard;
 	private int turnTrack;
-	private ArrayList<Player> players;
+	public ArrayList<Player> players;
 	private boolean inReverse;
 	private boolean gameOver;
 	private ArrayList<String> names;
 	
 	public void play() {
 		ui.createUI();
+		ui.getGame(this);
 		
-//		setup();
-//		deal();
-//		
-//		for(int i = 0; i < 1; i++) {
-//			System.out.println("-------------------------- Game: "+(i + 1));
-//			while(!gameOver) {
-//				Player p = players.get(turnTrack);			
-//				if(p.takeTurn(deck, discard)) {
-//					if(winCheck(p)) {
-//					break;
-//				}
-//					checkDiscardRule();
-//				}
-//				advanceTurnTrack();
-//			}
-//			cleanUp();
-//			deal();
-//		}
+		setup();
+		deal();
+		ui.updateUI();
+		
+		for(int i = 0; i < 1; i++) {
+			System.out.println("-------------------------- Game: "+(i + 1));
+			while(!gameOver) {
+				Player p = players.get(turnTrack);			
+				if(p.takeTurn(deck, discard)) {
+					if(winCheck(p)) {
+					break;
+				}
+					checkDiscardRule();
+				}
+				advanceTurnTrack();
+			}
+			cleanUp();
+			deal();
+		}
 	}
 	
 	

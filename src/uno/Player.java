@@ -35,6 +35,10 @@ public class Player {
 		return hand.size();
 	}
 	
+	public ArrayList<UnoCard> getHand(){
+		return hand;
+	}
+	
 	public void clearHand() {
 		hand.clear();
 	}
