@@ -11,41 +11,39 @@ public class Game {
 	
 	private CardStack deck;
 	private CardStack discard;
-	private ArrayList<Player> bots;
-	private Player user;
+	private int turnTrack;
+	private ArrayList<Player> players;
 	private boolean inReverse;
 	private boolean gameOver;
 	private ArrayList<String> names;
 	
 	public void play() {
 		setup();
-
-		
 		deal();
-			
-		for(Player p: bots) {
-			p.takeTurn(deck, discard);
-			winCheck(p);
-			checkDiscardRule();
+		
+		for(int i = 0; i < 100; i++) {
+			System.out.println("-------------------------- Game: "+i);
+			while(!gameOver) {
+				Player p = players.get(turnTrack);			
+				p.takeTurn(deck, discard);
+				if(winCheck(p)) {
+					break;
+				}
+				checkDiscardRule();
+				advanceTurnTrack();
+				
+			}
+			cleanUp();
+			deal();
 		}
-			
-			
-		
-		
-		cleanUp();
-		deal();
-		
-		
-		
 	}
 	
 	
 	private void setup() {
-		inReverse = false;
 		deck = new CardStack();
 		deck.populateDeck();
 		discard = new CardStack();
-		bots = new ArrayList<Player>();
+		players = new ArrayList<Player>();
 		names = new ArrayList<String>();
 		names.add("John");
 		names.add("Alec");
@@ -55,50 +53,73 @@ public class Game {
 		names.add("Steve");
 		Collections.shuffle(names);
 		
-		for(int i = 0; i < 3; i++) {
+		for(int i = 0; i < 4; i++) {
 			Player newPlayer = new Player(names.get(i));
-			bots.add(newPlayer);
+			newPlayer.setUser(false);
+			players.add(newPlayer);
 		}
+		players.add(new Player(true));
 	}
 	
 	private void deal() {
+		turnTrack = 0;
+		inReverse = false;
 		deck.clear();
 		discard.clear();
 		deck.populateDeck();
 		deck.shuffle();
 		for(int i = 0; i < 7; i++) {
-			for(Player p: bots) {
-				p.drawCards(1, deck);
+			for(Player p: players) {
+				p.drawCards(1, deck, discard);
 			}
 		}
 		discard.putCardOnTop(deck.pullTopCard());
 	}
 	
 	private void cleanUp() {
-		for(Player p: bots) {
+		for(Player p: players) {
 			p.clearHand();
 		}
 		deck.clear();
 		discard.clear();
-	}
-	
-	private void reShuffle() {
-		discard.removeTempWilds();
-		while(!discard.isEmpty()) {
-			deck.putCardOnTop(discard.pullTopCard());
-		}
+		gameOver = false;
 	}
 	
 	public void checkDiscardRule() {
+		int r = discard.getTopCard().getRankInt();
+		if(r == 10) {
+			advanceTurnTrack();
+		}else if (r == 11) {
+			inReverse = !inReverse;
+		}else if(r == 12){
+			players.get(turnTrack +1).drawCards(2, deck, discard); 
+		}else if(r == 13) {
+			players.get(turnTrack +1).drawCards(4, deck, discard);
+		}
 		
 	}
 	
 	private boolean winCheck(Player p) {
 		if(p.getHandSize() == 0) {
 			gameOver = true;
+			System.out.println(p.getName()+" Wins------");
 			return true;
 		}else {
 			return false;
+		}
+	}
+	
+	private void advanceTurnTrack() {
+		if(!inReverse) {
+			turnTrack++;
+			if(turnTrack == 4) {
+				turnTrack = 0;
+			}
+		}else {
+			turnTrack--;
+			if(turnTrack == -1) {
+				turnTrack = 3;
+			}
 		}
 	}
 

@@ -16,14 +16,6 @@ public class UnoCard {
 		setTempColorInt(-1);
 	}
 	
-	public int getTempColorInt() {
-		return tempColorInt;
-	}
-
-	public void setTempColorInt(int tempColorInt) {
-		this.tempColorInt = tempColorInt;
-	}
-
 	public String getRankAsString() {
 		if(rankInt <= 9) {
 			return Integer.toString(rankInt);
@@ -71,6 +63,14 @@ public class UnoCard {
 		}
 	}
 	
+	public int getTempColorInt() {
+		return tempColorInt;
+	}
+
+	public void setTempColorInt(int tempColorInt) {
+		this.tempColorInt = tempColorInt;
+	}
+	
 	public Color getTempColorAsColor() {
 		switch (tempColorInt) {
 		case 0: return Color.red;
@@ -79,6 +79,17 @@ public class UnoCard {
 		case 3: return Color.green;
 		case 4: return Color.gray;
 		default : return Color.pink;
+		}
+	}
+	
+	public String getTempColorAsString() {
+		switch(tempColorInt) {
+		case 0: return "Red";
+		case 1: return "Yellow";
+		case 2: return "Blue";
+		case 3: return "Green";
+		case 4: return "Black";
+		default: return "Error";
 		}
 	}
 	

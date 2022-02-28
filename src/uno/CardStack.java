@@ -43,9 +43,16 @@ private ArrayList<UnoCard> cardsInStack = new ArrayList<UnoCard>();
 	public UnoCard pullTopCard() {
 		return cardsInStack.remove(cardsInStack.size() -1);
 	}
+	public UnoCard pullBottomCard() {
+		return cardsInStack.remove(0);
+	}
 	
 	public void printSize() {
 		System.out.println(cardsInStack.size());
+	}
+	
+	public int getSize() {
+		return cardsInStack.size();
 	}
 	
 	public void printCardsInStack() {

@@ -4,10 +4,15 @@ import java.util.ArrayList;
 
 public class Player {
 	private String name;
+	private boolean isUser;
 	private ArrayList<UnoCard> hand = new ArrayList<UnoCard>();
 	
 	public Player(String name) {
 		setName(name);
+	}
+	
+	public Player (boolean isUser) {
+		this.isUser = isUser;	
 	}
 	
 	public String getName() {
@@ -18,6 +23,14 @@ public class Player {
 		this.name = name;
 	}
 	
+	public boolean isUser() {
+		return isUser;
+	}
+
+	public void setUser(boolean isUser) {
+		this.isUser = isUser;
+	}
+
 	public int getHandSize() {
 		return hand.size();
 	}
@@ -26,37 +39,50 @@ public class Player {
 		hand.clear();
 	}
 
-	public void drawCards(int amount, CardStack deck) {
+	public void drawCards(int amount, CardStack deck, CardStack discard) {
 		
 		for(int i = 0; i < amount; i++) {
-		
+			if(deck.isEmpty()) {
+				reShuffle(deck, discard);
+				System.out.println("reshuffle----------------");
+			}
 		hand.add(deck.pullTopCard());
 		}
 	}
 	
+	private void reShuffle(CardStack deck, CardStack discard) {
+		discard.removeTempWilds();
+		while(discard.getSize() > 1) {
+			deck.putCardOnTop(discard.pullBottomCard());
+		}
+		deck.shuffle();
+	}
+	
+	
 	public ArrayList<Integer> getPlayableCards(UnoCard card) {
 		ArrayList<Integer> playableCards = new ArrayList<Integer>();
 		
-		for(int i = 0; i > hand.size(); i++) {
+		//System.out.println(hand.size());
+		for(int i = 0; i < hand.size(); i++) {
 			//check discard wild
 			if(card.getColorInt() == 4) {
 				//check against temporary color
 				if(hand.get(i).getColorInt() == card.getTempColorInt()) {
 					playableCards.add(i);
-					continue;
+					//continue;
 				}
 			//discard not wild
 			}else {
 				//check against color
 				if(hand.get(i).getColorInt() == card.getColorInt()) {
 					playableCards.add(i);
-					continue;
+					//continue;
 				}
 			}
 			//check against rank
 			if(hand.get(i).getRankInt() == card.getRankInt()) {
 				playableCards.add(i);
-				continue;
+				//continue;
 			}
 			//check hand wild
 			if(hand.get(i).getColorInt() == 4) {
@@ -92,7 +118,7 @@ public class Player {
 		int maxColor = 0;
 		for(int i = 0; i < 3; i++) {
 			if (colorAmount[i] < colorAmount[i+1]) {
-				maxColor = colorAmount[i+1];
+				maxColor = i +1;
 			}		
 		}
 		return maxColor;
@@ -104,10 +130,12 @@ public class Player {
 		
 		if(c.getColorInt() == 4) {
 			c.setTempColorInt(pickWildColor());
+			System.out.println("Wild color is "+c.getTempColorAsString());
 		}
 		if(hand.size() == 2) {
 			System.out.println("UNO!");
 		}
+		System.out.println(name +" plays a "+c.getColorAsString()+" "+c.getRankAsString());
 		discard.putCardOnTop(hand.remove(p));
 		
 	}
@@ -116,7 +144,7 @@ public class Player {
 		if(checkCanPlay(discard)) {
 			playCard(discard);
 		}else {
-			drawCards(1, deck);
+			drawCards(1, deck, discard);
 			if(checkCanPlay(discard)) {
 				playCard(discard);
 			}else {
