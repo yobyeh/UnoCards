@@ -18,12 +18,12 @@ public class Game {
 	private ArrayList<String> names;
 	
 	public void play() {
-		ui.createUI();
-		ui.getGame(this);
+		//ui.createUI();
+		//ui.getGame(this);
 		
 		setup();
 		deal();
-		ui.updateUI();
+		//ui.updateUI();
 		
 		for(int i = 0; i < 1; i++) {
 			System.out.println("-------------------------- Game: "+(i + 1));
@@ -98,7 +98,7 @@ public class Game {
 			inReverse = !inReverse;
 		}else if(r == 12){
 			players.get(nextPlayerLocation()).drawCards(2, deck, discard); 
-		}else if(r == 13) {
+		}else if(r == 14) {
 			players.get(nextPlayerLocation()).drawCards(4, deck, discard);
 		}
 		

@@ -148,14 +148,17 @@ public class Player {
 	public boolean takeTurn(CardStack deck, CardStack discard) {
 		if(checkCanPlay(discard)) {
 			playCard(discard);
+			System.out.println(hand.size());
 			return true;
 		}else {
 			drawCards(1, deck, discard);
 			if(checkCanPlay(discard)) {
 				playCard(discard);
+				System.out.println(hand.size());
 				return true;
 			}else {
 				System.out.println(name+" PASS");
+				System.out.println(hand.size());
 				return false;
 			}
 			
