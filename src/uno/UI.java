@@ -21,6 +21,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 public class UI extends JFrame implements ActionListener {
 	
@@ -45,6 +46,7 @@ public class UI extends JFrame implements ActionListener {
 	JButton pass;
 	JLabel message;
 	JLayeredPane layerdPane;
+	ImageIcon wildIcon;
 	
 	Game game;
 	
@@ -56,6 +58,11 @@ public class UI extends JFrame implements ActionListener {
 		window.getContentPane().setBackground(Color.gray);
 		window.setLayout(new GridLayout(4,1));
 		window.setVisible(true);
+		
+		ImageIcon tempImg = new ImageIcon(getClass().getClassLoader().getResource("res/Wild.png"));
+		Image scaleImage = tempImg.getImage().getScaledInstance(10, 10,Image.SCALE_DEFAULT);
+		ImageIcon icon = new ImageIcon(scaleImage); 
+		wildIcon = icon;
 		
 		//row 1
 		topPanel = new JPanel();
@@ -174,6 +181,33 @@ public class UI extends JFrame implements ActionListener {
 					break;
 			case -1: System.exit(0);
 					break;
+		}
+		
+	}
+	
+	public void wildDialog() {
+		Object[] possibilities = {"Red", "Yellow", "Blue","Green"};
+		String s = (String)JOptionPane.showInputDialog(
+		                    window,
+		                    "Choose a wild color",
+		                    "Wild Color Picker",
+		                    JOptionPane.PLAIN_MESSAGE,
+		                    wildIcon,
+		                    possibilities,
+		                    "Picker");
+
+		//If a string was returned, say so.
+		if ((s != null) && (s.length() > 0)) {
+		    if(s == "Red") {
+		    	game.setDiscardsTempWildColor(0);
+		    }else if (s == "Yellow") {
+		    	game.setDiscardsTempWildColor(1);
+		    }else if (s == "Blue") {
+		    	game.setDiscardsTempWildColor(2);
+		    }else {
+		    	game.setDiscardsTempWildColor(3);
+		    }
+		    return;
 		}
 		
 	}

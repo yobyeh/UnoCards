@@ -175,12 +175,17 @@ public class Game {
 		ui.updateUI();
 	}
 	
+	public void setDiscardsTempWildColor(int c) {
+		discard.getTopCard().setTempColorInt(c);
+	}
+	
 	public void userSelected(String text, Color color) {
 		//if(getCurrentPlayer().playable(text, color, discard.getTopCard());
 		
 		
 		//after played check for wild and add selesction 
 		//discard check
+		//wildDialog
 		//run bot
 		
 		
