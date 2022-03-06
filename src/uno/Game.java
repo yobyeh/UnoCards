@@ -2,6 +2,7 @@ package uno;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.awt.Color;
 
 public class Game {
 	
@@ -17,29 +18,21 @@ public class Game {
 	private boolean gameOver;
 	private ArrayList<String> names;
 	
+	
+	//take turn
+	//win check
+	//discard rule check
+	//advance turn rack
 	public void play() {
-		//ui.createUI();
-		//ui.getGame(this);
+		ui.createUI();
+		ui.getGame(this);
 		
 		setup();
 		deal();
-		//ui.updateUI();
+		ui.updateUI();
+		botTrun();
 		
-		for(int i = 0; i < 1; i++) {
-			System.out.println("-------------------------- Game: "+(i + 1));
-			while(!gameOver) {
-				Player p = players.get(turnTrack);			
-				if(p.takeTurn(deck, discard)) {
-					if(winCheck(p)) {
-					break;
-				}
-					checkDiscardRule();
-				}
-				advanceTurnTrack();
-			}
-			cleanUp();
-			deal();
-		}
+		
 	}
 	
 	
@@ -58,12 +51,14 @@ public class Game {
 		names.add("Angel");
 		Collections.shuffle(names);
 		
-		for(int i = 0; i < 4; i++) {
+		for(int i = 0; i < 3; i++) {
 			Player newPlayer = new Player(names.get(i));
 			newPlayer.setUser(false);
 			players.add(newPlayer);
 		}
-		//players.add(new Player(true));
+		Player newPlayer = new Player("You");
+		newPlayer.setUser(true);
+		players.add(newPlayer);
 	}
 	
 	private void deal() {
@@ -85,9 +80,26 @@ public class Game {
 		for(Player p: players) {
 			p.clearHand();
 		}
+		turnTrack = 0;
 		deck.clear();
 		discard.clear();
 		gameOver = false;
+	}
+	
+	public void botTrun() {
+		
+				
+		while(players.get(turnTrack).isUser() != true) {
+			Player p = players.get(turnTrack);
+			if(p.takeTurn(deck, discard)) {
+				winCheck(p);
+					
+				checkDiscardRule();
+				}
+				advanceTurnTrack();
+		}
+		
+		ui.updateUI();
 	}
 	
 	public void checkDiscardRule() {
@@ -104,14 +116,13 @@ public class Game {
 		
 	}
 	
-	private boolean winCheck(Player p) {
+	private void winCheck(Player p) {
 		if(p.getHandSize() == 0) {
 			gameOver = true;
 			System.out.println(p.getName()+" Wins------");
-			return true;
-		}else {
-			return false;
+			ui.winDialog();
 		}
+			
 	}
 	
 	private void advanceTurnTrack() {
@@ -142,10 +153,38 @@ public class Game {
 			return turnTrack -1;
 		}
 	}
+	
+	public void userDraw() {
+		players.get(turnTrack).drawCards(1, deck, discard);
+		ui.updateCardPanel();
+	}
+	
+	public void userPass() {
+		advanceTurnTrack();
+		botTrun();
+		
+	}
+	
+	public Player getCurrentPlayer() {
+		return players.get(turnTrack);
+	}
+	
+	public void nextGame() {
+		cleanUp();
+		deal();
+		ui.updateUI();
+	}
+	
+	public void userSelected(String text, Color color) {
+		//if(getCurrentPlayer().playable(text, color, discard.getTopCard());
+		
+		
+		//after played check for wild and add selesction 
+		//discard check
+		//run bot
+		
+		
+	}
 
-	
-
-	
-	
 
 }

@@ -1,8 +1,8 @@
 package uno;
 
 import java.awt.Color;
-
 import javax.swing.ImageIcon;
+import java.awt.Image;
 
 public class UnoCard {
 
@@ -57,13 +57,17 @@ public class UnoCard {
 	}
 	
 	public Color getColorAsColor() {
-		switch (colorInt) {
-		case 0: return Color.red;
-		case 1: return Color.yellow;
-		case 2: return Color.blue;
-		case 3: return Color.green;
-		case 4: return Color.gray;
-		default : return Color.pink;
+		if(tempColorInt == -1) {
+			switch (colorInt) {
+			case 0: return Color.red;
+			case 1: return Color.yellow;
+			case 2: return Color.blue;
+			case 3: return Color.green;
+			case 4: return Color.gray;
+			default : return Color.pink;
+			}
+		}else {
+			return getTempColorAsColor();
 		}
 	}
 	
@@ -103,7 +107,8 @@ public class UnoCard {
 	
 	private void setIcon() {
 		ImageIcon tempImg = new ImageIcon(getClass().getClassLoader().getResource("res/Blue0.png"));
-		//img = tempImg.getScaledInstance( NEW_WIDTH, NEW_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ; 
+		Image scaleImage = tempImg.getImage().getScaledInstance(100, 100,Image.SCALE_DEFAULT);
+		ImageIcon icon = new ImageIcon(scaleImage);
 		img = tempImg;
 	}
 	

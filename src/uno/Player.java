@@ -1,6 +1,7 @@
 package uno;
 
 import java.util.ArrayList;
+import java.awt.Color;
 
 public class Player {
 	private String name;
@@ -9,10 +10,6 @@ public class Player {
 	
 	public Player(String name) {
 		setName(name);
-	}
-	
-	public Player (boolean isUser) {
-		this.isUser = isUser;	
 	}
 	
 	public String getName() {
@@ -128,7 +125,7 @@ public class Player {
 		return maxColor;
 	}
 	
-	public void playCard(CardStack discard) {
+	private void playCard(CardStack discard) {
 		int p = pickCard(discard);
 		UnoCard c = hand.get(p);
 		
@@ -148,26 +145,37 @@ public class Player {
 	public boolean takeTurn(CardStack deck, CardStack discard) {
 		if(checkCanPlay(discard)) {
 			playCard(discard);
-			System.out.println(hand.size());
+			//System.out.println(hand.size());
 			return true;
 		}else {
 			drawCards(1, deck, discard);
 			if(checkCanPlay(discard)) {
 				playCard(discard);
-				System.out.println(hand.size());
+				//System.out.println(hand.size());
 				return true;
 			}else {
 				System.out.println(name+" PASS");
-				System.out.println(hand.size());
+				//System.out.println(hand.size());
 				return false;
 			}
 			
 		}
 	}
 	
+	// picking wild color not setup
+	public boolean playable(String text, Color color, UnoCard topDiscard) {
+		if(color == Color.black) {
+			return true;
+		}
+		
+		
+		return false;
+	}
 	
-	//disacrd still shecked on pass
-	
+//	public boolean equals(UnoCard card1, UnoCard card2) {
+//		if(card1.)
+//		
+//	}
 	
 	
 	

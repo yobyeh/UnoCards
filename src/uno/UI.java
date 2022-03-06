@@ -3,20 +3,26 @@ package uno;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-
-public class UI {
+public class UI extends JFrame implements ActionListener {
 	
 	JFrame window;
 	JPanel topPanel;
@@ -38,6 +44,7 @@ public class UI {
 	JButton draw;
 	JButton pass;
 	JLabel message;
+	JLayeredPane layerdPane;
 	
 	Game game;
 	
@@ -52,7 +59,7 @@ public class UI {
 		
 		//row 1
 		topPanel = new JPanel();
-		bot0 = new JLabel("bot0", SwingConstants.CENTER);
+		bot1 = new JLabel("bot1", SwingConstants.CENTER);
 		blankPanel4 = new JPanel();
 		blankPanel5 = new JPanel();
 		
@@ -60,21 +67,15 @@ public class UI {
 		topPanel.setBackground(Color.gray);
 		blankPanel4.setBackground(Color.darkGray);
 		blankPanel5.setBackground(Color.darkGray);
-		bot0.setPreferredSize(new Dimension(114, 150));
-		
-//		JButton newButton = new JButton();
-		//img = new ImageIcon(getClass().getClassLoader().getResource("res/Blue0.png"));
-		//img2 = new ImageIcon(getClass().getClassLoader().getResource("res/Blue1.png"));
-//		newButton.setIcon(img);
-//		topPanel.add(newButton);
+		bot1.setPreferredSize(new Dimension(114, 150));
 		
 		topPanel.add(blankPanel4);
-		topPanel.add(bot0);
+		topPanel.add(bot1);
 		topPanel.add(blankPanel5);
 		
 		//row 2
 		deckPanel = new JPanel();
-		bot1 = new JLabel("bot1", SwingConstants.CENTER);
+		bot0 = new JLabel("bot0", SwingConstants.CENTER);
 		blankPanel1 = new JPanel();
 		blankPanel2 = new JPanel();
 		blankPanel3 = new JPanel();
@@ -88,9 +89,8 @@ public class UI {
 		deckPanel.setLayout(new GridLayout(1,7));
 		deckPanel.setBackground(Color.gray);
 		discard.setOpaque(true);
-		discard.setForeground(Color.white);
 		
-		deckPanel.add(bot1);
+		deckPanel.add(bot0);
 		deckPanel.add(blankPanel1);
 		deckPanel.add(deck);
 		deckPanel.add(blankPanel2);
@@ -101,7 +101,7 @@ public class UI {
 		//row 3
 		cardPanel = new JPanel();
 		cardPanel.setBackground(Color.darkGray);
-		cardPanel.setLayout(new GridLayout(1,1));
+		cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.X_AXIS));
 		
 		//row 4
 		bottomPanel = new JPanel();
@@ -115,6 +115,9 @@ public class UI {
 		bottomPanel.setBackground(Color.darkGray);
 		blankPanel6.setBackground(Color.darkGray);
 		blankPanel7.setBackground(Color.darkGray);
+		draw.addActionListener(this);
+		pass.addActionListener(this);
+		
 		bottomPanel.add(blankPanel6);
 		bottomPanel.add(draw);
 		bottomPanel.add(message);
@@ -135,26 +138,60 @@ public class UI {
 		bot1.setText(game.players.get(1).getName()+": "+game.players.get(1).getHandSize());
 		bot2.setText(game.players.get(2).getName()+": "+game.players.get(2).getHandSize());
 		deck.setText("Deck: "+game.deck.getSize());
-		discard.setText("Discard: "+game.discard.getSize());
-		discard.setBackground(Color.blue);
+		discard.setText(game.discard.getTopCard().getRankAsString());
+		discard.setBackground(game.discard.getTopCard().getColorAsColor());
 		updateCardPanel();
 	}
 	
 	public void updateCardPanel() {
-		
+		cardPanel.removeAll();
 		for(UnoCard c: game.players.get(3).getHand()) {
 			JButton newButton = new JButton(); 
-			newButton.setIcon(c.getIcon());
-			newButton.setText(c.getRankAsString());
+			
+			newButton.setText(Integer.toString(c.getRankInt()));
 			newButton.setBackground(c.getColorAsColor());
+			//newButton.setMinimumSize(new java.awt.Dimension(100, 100));
+			newButton.setMaximumSize(new java.awt.Dimension(85, 112));
+			newButton.addActionListener(this);
 			cardPanel.add(newButton);
 		}
 		cardPanel.revalidate();
 		cardPanel.repaint();
 	}
 	
+	
 	public void getGame(Game g) {
 		game = g;
+	}
+	
+	public void winDialog() {
+		
+		int answer = JOptionPane.showConfirmDialog(null, game.getCurrentPlayer().getName()+" Win", "Play again?", JOptionPane.YES_NO_OPTION);
+		switch(answer) {
+			case 0: game.nextGame();
+					break;
+			case 1: System.exit(0);
+					break;
+			case -1: System.exit(0);
+					break;
+		}
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == draw) {
+			System.out.println("draw--------------------");
+			game.userDraw();
+		}else if(e.getSource() == pass) {
+			System.out.println("pass--------------------");
+			game.userPass();
+		}else {
+			JButton button = (JButton) e.getSource();
+			game.userSelected(button.getText(), button.getBackground());
+			
+		}
+		
 	}
 	
 	
