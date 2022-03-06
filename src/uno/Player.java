@@ -163,13 +163,56 @@ public class Player {
 	}
 	
 	// picking wild color not setup
-	public boolean playable(String text, Color color, UnoCard topDiscard) {
+	//return 0 if can't play 2 if wild -1 if pass
+	//messy, not built for passing 
+	//drawing cards not implemented
+	public int userPlay(String text, Color color, CardStack discard) {
+		int r;
+		int c;
+		int passOrwild = 0;
+		
 		if(color == Color.black) {
-			return true;
+			c = 4;
+		}else if (color == Color.red) {
+			c = 0;
+		}else if (color == Color.yellow) {
+			c = 1;
+		}
+		else if (color == Color.blue) {
+			c = 2;
+		}else {
+			c = 3;
+		}
+		
+		if(text == "Skip") {
+			r = 10;
+		}else if(text == "Reverse") {
+			r = 11;
+		}else if(text == "Draw2") {
+			r = 12;
+		}else {
+			r =Integer.parseInt(text);
+		}
+		
+		if(discard.getTopCard().getColorInt() == c || discard.getTopCard().getRankInt() == r || c == 4) {
+			ArrayList<Integer> playableCards = getPlayableCards(discard.getTopCard());
+			for(Integer i: playableCards) {	
+				if(hand.get(i).getRankInt() == r && hand.get(i).getColorInt() == c) {
+					int j = i;
+					discard.putCardOnTop(hand.remove(j));
+					if(c == 4) {
+						passOrwild = 1;
+					}
+					return passOrwild;
+					}
+			}
+			
 		}
 		
 		
-		return false;
+		
+		
+		return passOrwild;
 	}
 	
 //	public boolean equals(UnoCard card1, UnoCard card2) {
