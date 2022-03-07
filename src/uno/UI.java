@@ -47,6 +47,7 @@ public class UI extends JFrame implements ActionListener {
 	JLabel message;
 	JLayeredPane layerdPane;
 	ImageIcon wildIcon;
+	JLabel numbers;
 	
 	Game game;
 	
@@ -114,6 +115,7 @@ public class UI extends JFrame implements ActionListener {
 		bottomPanel = new JPanel();
 		blankPanel6 = new JPanel();
 		blankPanel7 = new JPanel();
+		numbers = new JLabel("",SwingConstants.CENTER);
 		draw = new JButton("Draw");
 		pass = new JButton("Pass");
 		message = new JLabel("Click a card to play", SwingConstants.CENTER);
@@ -124,12 +126,14 @@ public class UI extends JFrame implements ActionListener {
 		blankPanel7.setBackground(Color.darkGray);
 		draw.addActionListener(this);
 		pass.addActionListener(this);
+		numbers.setForeground(Color.white);
+		numbers.setText("<html>10 = Skip<br>11 = Reverse<br>12 = Draw2<br>13 = Wild<br>14 = Wild4</html>");
 		
 		bottomPanel.add(blankPanel6);
 		bottomPanel.add(draw);
 		bottomPanel.add(message);
 		bottomPanel.add(pass);
-		bottomPanel.add(blankPanel7);
+		bottomPanel.add(numbers);
 		
 		window.add(topPanel);
 		window.add(deckPanel);

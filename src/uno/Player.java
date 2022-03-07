@@ -162,16 +162,13 @@ public class Player {
 		}
 	}
 	
-	// picking wild color not setup
-	//return 0 if can't play 2 if wild -1 if pass
-	//messy, not built for passing 
-	//drawing cards not implemented
+	//return 0 if can't play, 1 if played, 2 if wild
 	public int userPlay(String text, Color color, CardStack discard) {
 		int r;
 		int c;
-		int passOrwild = 0;
+		int playOrwild = 0;
 		
-		if(color == Color.black) {
+		if(color == Color.gray) {
 			c = 4;
 		}else if (color == Color.red) {
 			c = 0;
@@ -190,37 +187,42 @@ public class Player {
 			r = 11;
 		}else if(text == "Draw2") {
 			r = 12;
-		}else {
+		}else if(text == "Wild") {
+			r = 13;
+		}else if(text == "Wild4") {
+			r = 14;
+		}
+		else {
 			r =Integer.parseInt(text);
 		}
 		
-		if(discard.getTopCard().getColorInt() == c || discard.getTopCard().getRankInt() == r || c == 4) {
+		if(discard.getTopCard().getColorInt() == c || discard.getTopCard().getRankInt() == r || c ==4) {
 			ArrayList<Integer> playableCards = getPlayableCards(discard.getTopCard());
 			for(Integer i: playableCards) {	
-				if(hand.get(i).getRankInt() == r && hand.get(i).getColorInt() == c) {
-					int j = i;
-					discard.putCardOnTop(hand.remove(j));
-					if(c == 4) {
-						passOrwild = 1;
-					}
-					return passOrwild;
+				int j = i;
+				int handRank = hand.get(i).getRankInt();
+				int handColor = hand.get(i).getColorInt();
+					
+					if(handRank == r && handColor == c) {
+						discard.putCardOnTop(hand.remove(j));
+							switch(c) {
+							case 4: playOrwild = 2;
+								break;
+							default: playOrwild = 1;
+							}
+						return playOrwild;
 					}
 			}
-			
 		}
-		
-		
-		
-		
-		return passOrwild;
+		return playOrwild;
 	}
 	
-//	public boolean equals(UnoCard card1, UnoCard card2) {
-//		if(card1.)
-//		
-//	}
-	
-	
+	public boolean equals(UnoCard card1, UnoCard card2) {
+		if(card1.getRankInt() == card2.getRankInt() && card1.getColorInt() == card2.getColorInt()) {
+			return true;
+		}
+		return false;
+	}
 	
 	
 	

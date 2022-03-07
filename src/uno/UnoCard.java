@@ -48,12 +48,16 @@ public class UnoCard {
 	}
 	
 	public int getRankInt() {
-		return rankInt;
+			return rankInt;
 	}
 
 	
 	public int getColorInt() {
-		return colorInt;
+		if(tempColorInt == -1) {
+			return colorInt;
+		}else {
+			return tempColorInt;
+		}
 	}
 	
 	public Color getColorAsColor() {
@@ -108,7 +112,7 @@ public class UnoCard {
 	private void setIcon() {
 		ImageIcon tempImg = new ImageIcon(getClass().getClassLoader().getResource("res/Blue0.png"));
 		Image scaleImage = tempImg.getImage().getScaledInstance(100, 100,Image.SCALE_DEFAULT);
-		ImageIcon icon = new ImageIcon(scaleImage);
+		//ImageIcon icon = new ImageIcon(scaleImage);
 		img = tempImg;
 	}
 	

@@ -74,6 +74,9 @@ public class Game {
 			}
 		}
 		discard.putCardOnTop(deck.pullTopCard());
+		while(discard.getTopCard().getColorInt() == 4) {
+			discard.putCardOnTop(deck.pullTopCard());
+		}
 	}
 	
 	private void cleanUp() {
@@ -92,7 +95,9 @@ public class Game {
 		while(players.get(turnTrack).isUser() != true) {
 			Player p = players.get(turnTrack);
 			if(p.takeTurn(deck, discard)) {
-				winCheck(p);
+				if(winCheck(p)) {
+					return;
+				}
 					
 				checkDiscardRule();
 				}
@@ -116,12 +121,14 @@ public class Game {
 		
 	}
 	
-	private void winCheck(Player p) {
+	private boolean winCheck(Player p) {
 		if(p.getHandSize() == 0) {
 			gameOver = true;
 			System.out.println(p.getName()+" Wins------");
 			ui.winDialog();
+			return true;
 		}
+		return false;
 			
 	}
 	
@@ -172,7 +179,7 @@ public class Game {
 	public void nextGame() {
 		cleanUp();
 		deal();
-		ui.updateUI();
+		botTrun();
 	}
 	
 	public void setDiscardsTempWildColor(int c) {
@@ -180,13 +187,21 @@ public class Game {
 	}
 	
 	public void userSelected(String text, Color color) {
-		//if(getCurrentPlayer().playable(text, color, discard.getTopCard());
+		int i = getCurrentPlayer().userPlay(text, color, discard);
+		if(winCheck(getCurrentPlayer())) {
+			return;
+		}
 		
-		
-		//after played check for wild and add selesction 
-		//discard check
-		//wildDialog
-		//run bot
+		if(i == 2) {
+			ui.wildDialog();
+		}
+		if(i == 1 || i == 2) {
+			System.out.println(getCurrentPlayer().getName() +" play a "+discard.getTopCard().getColorAsString()
+					+" "+discard.getTopCard().getRankAsString());
+			checkDiscardRule();
+			advanceTurnTrack();
+			botTrun();
+		}
 		
 		
 	}
